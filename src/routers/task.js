@@ -26,7 +26,7 @@ router.get('/tasks',async (req, res) => {
     }
 })
 
-router.get('/tasks/mytasks', auth, async (req, res) => {
+router.get('/tasks/my-tasks', auth, async (req, res) => {
     try {
         await req.user.populate('tasks').execPopulate()
         res.send(req.user.tasks)
