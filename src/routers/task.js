@@ -35,7 +35,7 @@ router.get('/tasks/my-tasks', auth, async (req, res) => {
     }
 })
 
-// Display v
+// Display all created own tasks by ID
 router.get('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id
 
