@@ -28,8 +28,15 @@ router.get('/tasks',async (req, res) => {
 
 router.get('/tasks/my-tasks', auth, async (req, res) => {
     const match = {}
+    const sort = {}
+
     if (req.query.completed) {
-        match.completed = req.query.completed
+        match.completed = req.query.completed //for URL:locahost:3000/tasks/my-tasks?completed=true
+    }
+
+    if (req.query.sortBy) {
+        const parts = req.query.sortBy.split(':')
+        sort[parts[0]] = parts[1] === 'desc' ? -1 : 1 // -1: desc; 1: asc
     }
 
     try {
@@ -37,8 +44,11 @@ router.get('/tasks/my-tasks', auth, async (req, res) => {
             path: 'tasks',
             match,
             options: {
+                //for URL:locahost:3000/tasks/my-tasks?limit=2&skip=1
                 limit: parseInt(req.query.limit),
-                skip: parseInt(req.query.skip)
+                skip: parseInt(req.query.skip),
+                //for URL:locahost:3000/tasks/my-tasks?sortBy=createdAt:desc
+                sort
             }
         }).execPopulate()
         res.send(req.user.tasks)
