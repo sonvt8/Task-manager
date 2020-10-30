@@ -8,7 +8,16 @@ const port = process.env.PORT || 3000
 
 const multer = require('multer')
 const upload = multer({
-    dest: 'images'  //auto creating images folder if not existed
+    dest: 'images',  //auto creating images folder if not existed
+    limits: {
+        fileSize: 1000000 //1Mbs
+    },
+    fileFilter(req, file, cb){
+        if (!file.originalname.match(/\.(doc|docx)$/)) {  //if not a file PDF
+            return cb(new Error('Please upload a Word file'))
+        }
+        cb(undefined, true)
+    }
 })
 
 app.post('/upload', upload.single('upload'), (req, res) => { //key of form data is upload
