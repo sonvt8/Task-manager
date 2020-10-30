@@ -155,7 +155,16 @@ router.delete('/users/:id', async (req, res) => {
 })
 
 const upload = multer({
-    dest: 'avatars' //auto creating avatars folder if not existed
+    dest: 'avatars', //auto creating avatars folder if not existed
+    limits: {
+        fileSize: 1000000 //1Mbs
+    },
+    fileFilter(req, file, cb){
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {  //if not a file PDF
+            return cb(new Error('Please upload an Image file'))
+        }
+        cb(undefined, true)
+    }
 })
 
 router.post('/users/me/avatar', upload.single('avatar'), (req,res) => {
